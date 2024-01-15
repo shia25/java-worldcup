@@ -91,6 +91,7 @@ public class Main {
             playersList.add(player);
 
         }
+        filePlayer.close();
 
 
     }
