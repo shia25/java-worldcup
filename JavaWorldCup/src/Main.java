@@ -1,16 +1,17 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class Main {
     public static Squad[] squads = new Squad[32];
 
     //ArrayLists to store new objects of players
-    private static ArrayList<Player> playersList = new ArrayList<>();
+    public static ArrayList<Player> playersList = new ArrayList<>();
 
     //ArrayLists to store new objects of Managers
-    private static ArrayList<Manager> managersList = new ArrayList<>();
+    public static ArrayList<Manager> managersList = new ArrayList<>();
 
 
 
@@ -52,11 +53,42 @@ public class Main {
 
 
         while(filePlayer.hasNextLine()){
+            String Properties = " ";
             //Separating the row into individual data items
-            filePlayer.useDelimiter(",");
-            //Storing player properties into new v
+            //Storing player properties from cvs file into new variables
+            String[] playerProperties = Properties.toString().split(",");
 
+            String firstname = playerProperties[0];
+            String surname = playerProperties[1];
+            String team = playerProperties[2];
+            String positionValue = playerProperties[3];
 
+            // Note: Double.parseDouble method allows a conversion of a string, containing a numeric representation into a double
+            double fitnessValue = Double.parseDouble(playerProperties[4]);
+            double passingAccuracyValue = Double.parseDouble(playerProperties[5]);
+            double shotAccuracyValue = Double.parseDouble(playerProperties[6]);
+            double shotFrequencyValue = Double.parseDouble(playerProperties[7]);
+            double defensivenessValue = Double.parseDouble(playerProperties[8]);
+            double aggresionValue = Double.parseDouble(playerProperties[9]);
+            double positioningValue = Double.parseDouble(playerProperties[10]);
+            double dribblingValue = Double.parseDouble(playerProperties[11]);
+            double chanceCreationValue = Double.parseDouble(playerProperties[12]);
+            double offsideAdherenceValue = Double.parseDouble(playerProperties[13]);
+
+            //This object player will store the  playerProperties on these new variables collected from file player.cvs
+            Player player = new Player(positionValue, fitnessValue, passingAccuracyValue, shotAccuracyValue, shotFrequencyValue, defensivenessValue, aggresionValue, positioningValue, dribblingValue, chanceCreationValue, offsideAdherenceValue);
+            /*
+            Note: This added player does not have a firstname , surname  or team on its class properties,
+            therefore i'm not able to initialize or store it in the new object, but I can still add it on
+            as it falls under class person, by calling player object setFirstName() as it is method of person
+            player.setFirstName(firstname);
+            */
+            player.setFirstName(firstname);
+            player.setSurname(surname);
+            player.setTeam(team);
+
+            // This player is now added into player array list
+            playersList.add(player);
 
         }
 
