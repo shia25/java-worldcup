@@ -32,8 +32,6 @@ public class Main {
             //prints all the values separated by " | "
             System.out.print(filePlayer.next()+" | ");
         }
-        //if the next value not detected terminate
-        filePlayer.close();
 
 
         //creates object fileManager and initialized to read from file managers.csv
@@ -47,9 +45,6 @@ public class Main {
             //prints all the values separated by " | "
             System.out.print(fileManager.next()+" | ");
         }
-        System.out.println();
-        //if the next value not detected terminate
-        fileManager.close();
 
 
         while(filePlayer.hasNextLine()){
@@ -90,8 +85,48 @@ public class Main {
             // This player is now added into player array list
             playersList.add(player);
 
+            // Adding the player to the squad of the team
+            for (Squad squad: squads) {
+                if (squad.getTeamName().equals(player.getTeam())) {
+                    squad.addPlayer(player);
+                }
+
         }
         filePlayer.close();
+
+        while(fileManager.hasNextLine()){
+            String Properties = " ";
+            //Separating the row into individual data items
+            //Storing managers properties from cvs file into new variables
+            String[] managerProperties = Properties.toString().split(",");
+
+            String firstname = managerProperties[0];
+            String surname = managerProperties[1];
+            String team = managerProperties[2];
+            String favouredFormationValue = managerProperties[3];
+            double respectValue = Double.parseDouble(managerProperties[4]);
+            double abilityValue = Double.parseDouble(managerProperties[5]);
+            double knowledgeValue = Double.parseDouble(managerProperties[6]);
+            double beliefValue = Double.parseDouble(managerProperties[7]);
+
+            //This object manager will store the  playerProperties on these new variables collected from file player.cvs
+            Manager manager = new Manager(favouredFormationValue, respectValue, abilityValue, knowledgeValue, beliefValue);
+            manager.setFirstName(firstname);
+            manager.setSurname(surname);
+            manager.setTeam(team);
+
+            // This manager is now added into managers array list
+            managersList.add(manager);
+        }
+
+        // Assigning a new squad for each manager.
+        int i = 0;
+        for (Manager manager : managersList) {
+            // explain this further
+            squads[i] = new Squad(manager.getTeam(), manager);
+            i++;
+        }
+        fileManager.close();
 
 
     }
