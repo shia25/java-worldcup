@@ -12,7 +12,6 @@ public class Main {
 
     //ArrayLists to store new objects of Managers
     public static ArrayList<Manager> managersList = new ArrayList<>();
-    private static Object s;
 
 
     // learn how to use this
@@ -119,10 +118,9 @@ public class Main {
                 managersList.add(manager);
             }
 
-            // Assigning a new squad for each manager.
+            // Assigning each manager to a new squad
             int i = 0;
             for (Manager manager : managersList) {
-                // explain this further
                 squads[i] = new Squad(manager.getTeam(), manager);
                 i++;
             }
