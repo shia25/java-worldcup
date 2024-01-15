@@ -16,14 +16,14 @@ public class Squad {
     }
 
     //get a player object by surname
-    /*public Player getPlayer(String surname){
+    public Player getPlayer(String surname){
         for(Player p: players){
             if(p.getSurname().equals(surname)){
                 return p;
             }
         }
         return null;
-    }*/
+    }
 
     //get a player object by index
     public Player getPlayer(int n){

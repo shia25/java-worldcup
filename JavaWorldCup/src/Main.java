@@ -12,11 +12,11 @@ public class Main {
 
     //ArrayLists to store new objects of Managers
     public static ArrayList<Manager> managersList = new ArrayList<>();
-
+    private static Object s;
 
 
     // learn how to use this
-    public static void main(String[] args)throws FileNotFoundException{
+    public static void main(String[] args)throws FileNotFoundException {
 
         // need to make an object which is an Arraylist for players and managers, they will show up in the output
 
@@ -28,26 +28,26 @@ public class Main {
         filePlayer.useDelimiter(",");
 
         /* loops through file player until no value are left */
-        while(filePlayer.hasNext()){
+        while (filePlayer.hasNext()) {
             //prints all the values separated by " | "
-            System.out.print(filePlayer.next()+" | ");
+            System.out.print(filePlayer.next() + " | ");
         }
 
 
         //creates object fileManager and initialized to read from file managers.csv
-        Scanner fileManager = new Scanner (new File("JavaWorldCup/Managers.csv"));
+        Scanner fileManager = new Scanner(new File("JavaWorldCup/Managers.csv"));
 
         /* the delimiter insures that scanner separates all values in the  csv file with "," */
         fileManager.useDelimiter(",");
 
         /* loops through file managers until no value are left */
-        while(fileManager.hasNext()){
+        while (fileManager.hasNext()) {
             //prints all the values separated by " | "
-            System.out.print(fileManager.next()+" | ");
+            System.out.print(fileManager.next() + " | ");
         }
 
 
-        while(filePlayer.hasNextLine()){
+        while (filePlayer.hasNextLine()) {
             String Properties = " ";
             //Separating the row into individual data items
             //Storing player properties from cvs file into new variables
@@ -86,58 +86,62 @@ public class Main {
             playersList.add(player);
 
             // Adding the player to the squad of the team
-            for (Squad squad: squads) {
+            for (Squad squad : squads) {
                 if (squad.getTeamName().equals(player.getTeam())) {
                     squad.addPlayer(player);
                 }
 
+            }
+            filePlayer.close();
+
+            while (fileManager.hasNextLine()) {
+                Properties = " ";
+                //Separating the row into individual data items
+                //Storing managers properties from cvs file into new variables
+                String[] managerProperties = Properties.toString().split(",");
+
+                firstname = managerProperties[0];
+                surname = managerProperties[1];
+                team = managerProperties[2];
+                String favouredFormationValue = managerProperties[3];
+                double respectValue = Double.parseDouble(managerProperties[4]);
+                double abilityValue = Double.parseDouble(managerProperties[5]);
+                double knowledgeValue = Double.parseDouble(managerProperties[6]);
+                double beliefValue = Double.parseDouble(managerProperties[7]);
+
+                //This object manager will store the  playerProperties on these new variables collected from file player.cvs
+                Manager manager = new Manager(favouredFormationValue, respectValue, abilityValue, knowledgeValue, beliefValue);
+                manager.setFirstName(firstname);
+                manager.setSurname(surname);
+                manager.setTeam(team);
+
+                // This manager is now added into managers array list
+                managersList.add(manager);
+            }
+
+            // Assigning a new squad for each manager.
+            int i = 0;
+            for (Manager manager : managersList) {
+                // explain this further
+                squads[i] = new Squad(manager.getTeam(), manager);
+                i++;
+            }
+            fileManager.close();
+
+
         }
-        filePlayer.close();
-
-        while(fileManager.hasNextLine()){
-            String Properties = " ";
-            //Separating the row into individual data items
-            //Storing managers properties from cvs file into new variables
-            String[] managerProperties = Properties.toString().split(",");
-
-            String firstname = managerProperties[0];
-            String surname = managerProperties[1];
-            String team = managerProperties[2];
-            String favouredFormationValue = managerProperties[3];
-            double respectValue = Double.parseDouble(managerProperties[4]);
-            double abilityValue = Double.parseDouble(managerProperties[5]);
-            double knowledgeValue = Double.parseDouble(managerProperties[6]);
-            double beliefValue = Double.parseDouble(managerProperties[7]);
-
-            //This object manager will store the  playerProperties on these new variables collected from file player.cvs
-            Manager manager = new Manager(favouredFormationValue, respectValue, abilityValue, knowledgeValue, beliefValue);
-            manager.setFirstName(firstname);
-            manager.setSurname(surname);
-            manager.setTeam(team);
-
-            // This manager is now added into managers array list
-            managersList.add(manager);
-        }
-
-        // Assigning a new squad for each manager.
-        int i = 0;
-        for (Manager manager : managersList) {
-            // explain this further
-            squads[i] = new Squad(manager.getTeam(), manager);
-            i++;
-        }
-        fileManager.close();
-
-
     }
 
-    public static Team getTeam(Squad s){
-        Team t = new Team(s.getTeamName(), s.getManager());
 
-        return t;
-    }
+        public static Team getTeam (Squad s){
+            Team t = new Team(s.getTeamName(), s.getManager());
 
-    public static void runTournament(){
+            return t;
+        }
 
-    }
+        public static void runTournament () {
+
+        }
+
+
 }
