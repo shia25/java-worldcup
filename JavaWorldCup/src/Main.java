@@ -1,8 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static Squad[] squads = new Squad[32];
@@ -130,12 +128,75 @@ public class Main {
         }
     }
 
+        public static Team getTeam (Squad squad){
+            Team team = new Team(squad.getTeamName(), squad.getManager());
 
-        public static Team getTeam (Squad s){
-            Team t = new Team(s.getTeamName(), s.getManager());
+                Manager manager = squad.getManager();
+                String formation = manager.getFavouredFormation();
 
-            return t;
+                // using split the separate type of players in the formation to get the number of defenders, midfielders, and forwards
+                String[] formationParts = formation.split("-");
+                int defenders = Integer.parseInt(formationParts[0]);
+                int midfielders = Integer.parseInt(formationParts[1]);
+                int forwards = Integer.parseInt(formationParts[2]);
+                int goalkeepers = 1;
+
+                // arrayList for myPlayer objects that will store
+                ArrayList<Player> myPlayers = new ArrayList<>();
+
+                // using in built Collections.sort to find the best players
+                // Players with higher average attributes will appear first in the list
+                Collections.sort(myPlayers, new PlayerComparator());
+
+                // players are added to the team based on the preferred formation
+                int defendersCount = 0, midfieldersCount = 0, forwardsCount = 0, goalkeepersCount = 0;
+                for (Player player : myPlayers) {
+                    if (defendersCount < defenders && player.getPosition().equals("Defender")) {
+                        team.addPlayer(player);
+                        defendersCount++;
+                    } else if (midfieldersCount < midfielders && player.getPosition().equals("Midfielder")) {
+                        team.addPlayer(player);
+                        midfieldersCount++;
+                    } else if (forwardsCount < forwards && player.getPosition().equals("Forward")) {
+                        team.addPlayer(player);
+                        forwardsCount++;
+                    } else if (goalkeepersCount < goalkeepers && player.getPosition().equals("Goalkeeper")) {
+                        team.addPlayer(player);
+                        goalkeepersCount++;
+                    }
+
+                    // stopping count when all the required member of formation has been filled
+                    if (defendersCount == defenders &&
+                        midfieldersCount == midfielders &&
+                        forwardsCount == forwards &&
+                        goalkeepersCount == goalkeepers) {
+                        break;
+                    }
+                }
+
+            return team;
         }
+
+    // Using the in built Comparator to compare players attributes
+    static class PlayerComparator implements Comparator<Player> {
+        @Override
+        public int compare(Player player1, Player player2) {
+            // variable to store new average of comparing players
+            double average1 = calculateAverage(player1);
+            double average2 = calculateAverage(player2);
+
+            // comparing player average to find best player
+            return Double.compare(average2, average1);
+        }
+
+        //calculating the average of all player attributes to find best overall player
+        private double calculateAverage(Player player) {
+            return (player.getFitness() + player.getPassingAccuracy() + player.getShotAccuracy() +
+                    player.getShotFrequency() + player.getDefensiveness() + player.getAggression() +
+                    player.getPositioning() + player.getDribbling() + player.getChanceCreation() +
+                    player.getOffsideAdherence()) / 10.0;
+        }
+    }
 
         public static void runTournament () {
 

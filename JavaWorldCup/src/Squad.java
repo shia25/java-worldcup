@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class Squad {
     private String teamName;
@@ -37,4 +38,5 @@ public class Squad {
     public Manager getManager() {
         return manager;
     }
+
 }
