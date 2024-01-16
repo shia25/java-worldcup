@@ -198,9 +198,59 @@ public class Main {
         }
     }
 
-        public static void runTournament () {
+    public static void runTournament() {
+        // Create an array of teams
+        Team[] teams = new Team[32];
+        int index = 0;
+        // Assign teams to the array
+        for (Squad s : squads) {
+            Team tr = getTeam(s);
+            teams[index++] = new Team(tr.getTeamName(), tr.getManager());
+        }
+        // Divide teams into 8 groups of 4
+        Team[][] groups = new Team[8][4];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 4; j++) {
+                int teamIndex = i * 4 + j;
+                groups[i][j] = teams[teamIndex];
+            }
+        }
+        // Keeping track of who played games
+        Set<String> playedMatches = new HashSet<>();
 
+        // Play group stage matches
+        // Generating random scores for the group stage matches.
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    if (j == k) {
+                        continue;
+                    }
+                    Team team1 = groups[i][j];
+                    Team team2 = groups[i][k];
+                    String match = team1.getTeamName() + " vs " + team2.getTeamName();
+                    String match2 = team2.getTeamName() + " vs " + team1.getTeamName();
+                    if (playedMatches.contains(match) || playedMatches.contains(match2)) {
+                        continue;
+                    }
+                    playedMatches.add(match);
+                    int score1 = (int) (Math.random() * 5);
+                    int score2 = (int) (Math.random() * 5);
+                    System.out.println("Group stage " + i + team1.getTeamName() + " " + score1 + " - " + score2 + " "
+                            + team2.getTeamName());
+                }
+            }
         }
 
+        // Move top 2 teams from each group to knockout stage
+        Team[] knockoutTeams = new Team[16];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 2; j++) {
+                int knockoutIndex = i * 2 + j;
+                knockoutTeams[knockoutIndex] = groups[i][j];
+            }
+        }
+
+    }
 
 }
